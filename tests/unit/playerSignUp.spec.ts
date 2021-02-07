@@ -1,5 +1,10 @@
 import {mount} from '@vue/test-utils'
 import PlayerSignUp from "@/components/PlayerSignUp/PlayerSignUp";
+import playerValidator from "@/services/playerValidator";
+
+jest.mock('@/services/playerValidator', () => ({
+  isPlayerValid: jest.fn((name: string, heroClass: string) => name === "")
+}))
 
 describe('PlayerSignUp.vue', () => {
   it('success when name is valid', async () => {
@@ -14,6 +19,7 @@ describe('PlayerSignUp.vue', () => {
     const nameInputElement: HTMLInputElement = wrapper.find('input.name').element as HTMLInputElement;
     expect(nameInputElement.value).toBe('Joker');
     expect(checkedOptionElement.value).toBe('Thief');
+    expect(playerValidator.isPlayerValid).toHaveBeenCalled();
     expect(wrapper.find('.message').text()).toMatch('Your name is valid!')
   })
 

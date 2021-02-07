@@ -1,4 +1,5 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import playerValidator from "@/services/playerValidator";
 
 @Component
 export default class PlayerSignUp extends Vue {
@@ -8,6 +9,6 @@ export default class PlayerSignUp extends Vue {
 
     validatePlayer(event: Event) {
         event.preventDefault();
-        this.message = this.name === '' ? 'Your name is invalid! :(' : 'Your name is valid!';
+        this.message = playerValidator.isPlayerValid(this.name, this.heroClass) ? 'Your name is invalid! :(' : 'Your name is valid!';
     }
 }
