@@ -3,9 +3,9 @@ import playerValidator from "@/services/playerValidator";
 
 @Component
 export default class PlayerSignUp extends Vue {
-    name: string = '';
-    heroClass: string = '';
-    message: string = 'Please choose a name';
+    name = '';
+    heroClass = '';
+    message = 'Please choose a name';
 
     validatePlayer(event: Event) {
         event.preventDefault();

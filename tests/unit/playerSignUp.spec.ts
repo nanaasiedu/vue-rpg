@@ -1,22 +1,38 @@
-import {mount} from '@vue/test-utils'
+import {createLocalVue, mount} from '@vue/test-utils'
 import PlayerSignUp from "@/components/PlayerSignUp/PlayerSignUp";
 import playerValidator from "@/services/playerValidator";
+import Vuetify from 'vuetify'
+import Vue from 'vue';
+
+Vue.use(Vuetify);
 
 jest.mock('@/services/playerValidator', () => ({
   isPlayerValid: jest.fn((name: string, heroClass: string) => name === "")
 }))
 
 describe('PlayerSignUp.vue', () => {
-  it('success when name is valid', async () => {
-    const wrapper = mount(PlayerSignUp);
+  let localVue = createLocalVue();
+  let vuetify: Vuetify;
 
-    await wrapper.find('input.name').setValue('Joker');
+  beforeEach(() => {
+    localVue = createLocalVue()
+    //vuetify = new Vuetify()
+    localVue.use(Vuetify);
+  })
+
+  it('success when name is valid', async () => {
+    const wrapper = mount(PlayerSignUp, {
+      localVue,
+      //vuetify,
+    });
+
+    await wrapper.find('.name input').setValue('Joker');
     const heroClassOptions = wrapper.find('select.hero-class').findAll('option');
     await heroClassOptions.at(0).setSelected();
     await wrapper.find('input[type=submit]').trigger('click');
 
     const checkedOptionElement: HTMLOptionElement = wrapper.find('option:checked').element as HTMLOptionElement;
-    const nameInputElement: HTMLInputElement = wrapper.find('input.name').element as HTMLInputElement;
+    const nameInputElement: HTMLInputElement = wrapper.find('.name input').element as HTMLInputElement;
     expect(nameInputElement.value).toBe('Joker');
     expect(checkedOptionElement.value).toBe('Thief');
     expect(playerValidator.isPlayerValid).toHaveBeenCalled();
@@ -24,8 +40,11 @@ describe('PlayerSignUp.vue', () => {
   })
 
   it('unsuccessful when name is invalid', async () => {
-    const wrapper = mount(PlayerSignUp);
-    await wrapper.find('input.name').setValue('');
+    const wrapper = mount(PlayerSignUp, {
+      localVue,
+      //vuetify,
+    });
+    await wrapper.find('.name input').setValue('');
     const heroClassOptions = wrapper.find('select.hero-class').findAll('option');
 
     await heroClassOptions.at(0).setSelected();

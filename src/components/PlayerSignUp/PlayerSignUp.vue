@@ -2,8 +2,7 @@
   <div class="player-sign-up">
     <div class="message">{{message}}</div>
     <form>
-      <label>Name: {{name}}</label>
-      <input v-model="name" type="text" class="name"/>
+      <v-text-field label="Name" v-model="name" class="name"></v-text-field>
       <label>Class: {{heroClass}}</label>
       <select v-model="heroClass" class="hero-class">
         <option>Thief</option>
